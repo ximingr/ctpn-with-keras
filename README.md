@@ -1,5 +1,20 @@
 # keras-ctpn
 
+## 补充说明
+
+原作者训练的模型： https://pan.baidu.com/s/1JPCdQQnXCEIk18HWedugzQ
+
+下载之后，修改config
+
+### 测试方法
+
+```
+python predict.py --image_path image_examples.a0.png
+```
+
+之后，我自己的电脑死机，只能关电。 现在不确定是电脑的问题，还是原模型是在旧版的TF及Keras上训练出来的，待验证。
+
+
 [TOC]
 
 1. [说明](#说明)
