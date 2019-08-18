@@ -53,7 +53,7 @@ class Config(object):
     # 预训练模型
     PRE_TRAINED_WEIGHT = '/opt/pretrained_model/resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5'
 
-    WEIGHT_PATH = '/tmp/ctpn.h5'
+    WEIGHT_PATH = '/data/9.work/gitlab/references/keras-ctpn/ctpn.100.h5'
 
     # 数据集路径
     IMAGE_DIR = '/opt/dataset/OCR/ICDAR_2015/train_images'
