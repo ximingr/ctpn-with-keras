@@ -8,6 +8,7 @@
 
 
 class Config(object):
+
     IMAGES_PER_GPU = 4
     IMAGE_SHAPE = (720, 720, 3)
     MAX_GT_INSTANCES = 1000
@@ -51,13 +52,19 @@ class Config(object):
     # 是否使用侧边改善
     USE_SIDE_REFINE = True
     # 预训练模型
-    PRE_TRAINED_WEIGHT = '/opt/pretrained_model/resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5'
+    PRE_TRAINED_WEIGHT = '/data/9.work/ctpn-data/resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5'
 
-    WEIGHT_PATH = '/data/9.work/gitlab/references/keras-ctpn/ctpn.100.h5'
+    WEIGHT_PATH = '/data/9.work/ctpn-data/keras-ctpn/ctpn.100.h5'
 
     # 数据集路径
-    IMAGE_DIR = '/opt/dataset/OCR/ICDAR_2015/train_images'
-    IMAGE_GT_DIR = '/opt/dataset/OCR/ICDAR_2015/train_gt'
+    # IMAGE_DIR = '/data/9.work/ctpn-data/ICDAR_2015/train_images'
+    # IMAGE_GT_DIR = '/data/9.work/ctpn-data/ICDAR_2015/train_gt'
+
+    IMAGE_DIR = {2015: '/data/9.work/ctpn-data/ICDAR_2015/train_images',
+                    2017: '/data/9.work/ctpn-data/ICDAR2017/0325updated.task1train(626p)/train_images' }
+
+    IMAGE_GT_DIR = {2015 : '/data/9.work/ctpn-data/ICDAR_2015/train_gt',
+                    2017:'/data/9.work/ctpn-data/ICDAR2017/0325updated.task1train(626p)/train_gt' }
 
 
 cur_config = Config()

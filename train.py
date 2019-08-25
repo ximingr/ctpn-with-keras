@@ -10,6 +10,7 @@ import sys
 import tensorflow as tf
 import keras
 import argparse
+
 from keras.callbacks import TensorBoard, ModelCheckpoint, ReduceLROnPlateau
 from ctpn.layers import models
 from ctpn.config import cur_config as config
@@ -49,23 +50,27 @@ def get_call_back():
 
 
 def main(args):
-    set_gpu_growth()
+    # set_gpu_growth()
     # 加载标注
-    annotation_files = file_utils.get_sub_files(config.IMAGE_GT_DIR)
+    annotation_files = file_utils.get_sub_files(config.IMAGE_GT_DIR[args.year])
     image_annotations = [reader.load_annotation(file,
-                                                config.IMAGE_DIR) for file in annotation_files]
+                                                config.IMAGE_DIR[args.year]) for file in annotation_files]
     # 过滤不存在的图像，ICDAR2017中部分图像找不到
     image_annotations = [ann for ann in image_annotations if os.path.exists(ann['image_path'])]
+
     # 加载模型
     m = models.ctpn_net(config, 'train')
     models.compile(m, config, loss_names=['ctpn_regress_loss', 'ctpn_class_loss', 'side_regress_loss'])
     # 增加度量
     output = models.get_layer(m, 'ctpn_target').output
     models.add_metrics(m, ['gt_num', 'pos_num', 'neg_num', 'gt_min_iou', 'gt_avg_iou'], output[-5:])
+
+    # 从0开始的话，用resnet50
     if args.init_epochs > 0:
         m.load_weights(args.weight_path, by_name=True)
     else:
         m.load_weights(config.PRE_TRAINED_WEIGHT, by_name=True)
+
     m.summary()
     # 生成器
     gen = generator(image_annotations[:-100],
@@ -99,7 +104,8 @@ def main(args):
 
 if __name__ == '__main__':
     parse = argparse.ArgumentParser()
-    parse.add_argument("--epochs", type=int, default=100, help="epochs")
+    parse.add_argument("--year", type=int, default=2017, help="epochs")
+    parse.add_argument("--epochs", type=int, default=1, help="epochs, original defalt 100")
     parse.add_argument("--init_epochs", type=int, default=0, help="epochs")
     parse.add_argument("--weight_path", type=str, default=None, help="weight path")
     argments = parse.parse_args(sys.argv[1:])
