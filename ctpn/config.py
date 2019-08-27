@@ -52,19 +52,21 @@ class Config(object):
     # 是否使用侧边改善
     USE_SIDE_REFINE = True
     # 预训练模型
-    PRE_TRAINED_WEIGHT = '/data/9.work/ctpn-data/resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5'
 
-    WEIGHT_PATH = '/data/9.work/ctpn-data/keras-ctpn/ctpn.100.h5'
 
-    # 数据集路径
-    # IMAGE_DIR = '/data/9.work/ctpn-data/ICDAR_2015/train_images'
-    # IMAGE_GT_DIR = '/data/9.work/ctpn-data/ICDAR_2015/train_gt'
+    DATA_ROOT = "/data/9.work/ctpn-data"
 
-    IMAGE_DIR = {2015: '/data/9.work/ctpn-data/ICDAR_2015/train_images',
-                    2017: '/data/9.work/ctpn-data/ICDAR2017/0325updated.task1train(626p)/train_images' }
+    # in.
+    PRE_TRAINED_WEIGHT = '{}/resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5'.format(DATA_ROOT)
 
-    IMAGE_GT_DIR = {2015 : '/data/9.work/ctpn-data/ICDAR_2015/train_gt',
-                    2017:'/data/9.work/ctpn-data/ICDAR2017/0325updated.task1train(626p)/train_gt' }
+    # 数据集路径, in
+    IMAGE_DIR = {2015: '{}/ICDAR_2015/train_images'.format(DATA_ROOT),
+                    2017: '{}/ICDAR2017/0325updated.task1train(626p)/train_images'.format(DATA_ROOT) }
 
+    IMAGE_GT_DIR = {2015 : '{}/ICDAR_2015/train_gt'.format(DATA_ROOT),
+                    2017:'{}/ICDAR2017/0325updated.task1train(626p)/train_gt'.format(DATA_ROOT) }
+
+    # in, out
+    WEIGHT_PATH = '{}/ctpn.100.h5'.format(DATA_ROOT)
 
 cur_config = Config()

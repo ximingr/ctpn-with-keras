@@ -57,8 +57,8 @@ def main(args):
 
 if __name__ == '__main__':
     parse = argparse.ArgumentParser()
-    parse.add_argument("--image_path", type=str, help="image path")
-    parse.add_argument("--weight_path", type=str, default=None, help="weight path")
+    parse.add_argument("--image_path", type=str, help="image file name")
+    parse.add_argument("--weight_path", type=str, default=None, help="weight file name")
     parse.add_argument("--use_side_refine", type=int, default=1, help="1: use side refine; 0 not use")
     argments = parse.parse_args(sys.argv[1:])
     main(argments)
