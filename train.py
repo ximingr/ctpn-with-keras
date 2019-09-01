@@ -50,6 +50,7 @@ def get_call_back():
 
 
 def main(args):
+
     set_gpu_growth()
 
     # 加载标注
