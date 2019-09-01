@@ -15,6 +15,12 @@ python predict.py --image_path image_examples.a0.png
 之后，我自己的电脑死机，只能关电。 现在不确定是电脑的问题，还是原模型是在旧版的TF及Keras上训练出来的，待验证。
 
 
+### supported packages
+
+conda install scikit-image tensorflow keras shapely
+
+
+
 [TOC]
 
 1. [说明](#说明)

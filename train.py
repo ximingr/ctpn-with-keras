@@ -50,7 +50,8 @@ def get_call_back():
 
 
 def main(args):
-    # set_gpu_growth()
+    set_gpu_growth()
+
     # 加载标注
     annotation_files = file_utils.get_sub_files(config.IMAGE_GT_DIR[args.year])
     image_annotations = [reader.load_annotation(file,
