@@ -70,7 +70,7 @@ def nms(boxes, scores, class_logits, max_output_size, iou_threshold=0.5, score_t
     :param name:
     :return: 检测边框、边框得分、边框类别
     """
-    indices = tf.image.non_max_suppression(boxes, scores, max_output_size, iou_threshold, name)  # 一维索引
+    indices = tf.image.non_max_suppression(boxes, scores, max_output_size, iou_threshold, score_threshold, name)  # 一维索引
     output_boxes = tf.gather(boxes, indices)  # (M,4)
     class_scores = tf.expand_dims(tf.gather(scores, indices), axis=1)  # 扩展到二维(M,1)
     class_logits = tf.gather(class_logits, indices)

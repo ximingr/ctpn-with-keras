@@ -8,16 +8,28 @@
 
 ### 测试方法
 
+ali-yun：
+
 ```
+conda activate aigpu
+
+python train.py
+
 python predict.py --image_path image_examples.a0.png
+
+python evaluate.py --weight_path /data/9.work/ctpn-data/ctpn.100.h5 --image_dir /data/9.work/ctpn-data/ICDAR2019/test/ --output_dir outputimage/
+
 ```
 
 之后，我自己的电脑死机，只能关电。 现在不确定是电脑的问题，还是原模型是在旧版的TF及Keras上训练出来的，待验证。
 
 
-### supported packages
 
-conda install scikit-image tensorflow keras shapely
+### packages needed
+
+pip install Shapely
+
+conda install scikit-image tensorflow-gpu keras shapely
 
 
 

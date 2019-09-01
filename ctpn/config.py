@@ -10,6 +10,7 @@
 class Config(object):
 
     IMAGES_PER_GPU = 4
+
     IMAGE_SHAPE = (720, 720, 3)
     MAX_GT_INSTANCES = 1000
 
@@ -53,7 +54,21 @@ class Config(object):
     USE_SIDE_REFINE = True
     # 预训练模型
 
-
+    # folder structure DATA_ROOT
+    '''
+    ctpn-data
+    ├── ICDAR_2015
+    │   ├── test_images
+    │   ├── train_gt
+    │   └── train_images
+    ├── ICDAR2019
+    │   ├── 0325updated.task1train(626p)
+    │   ├── 0325updated.task2train(626p)
+    │   ├── fulltext_test(361p)
+    │   └── task3-test£¨347p)
+    ├── ctpn.100.h5
+    └── resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5
+    '''
     DATA_ROOT = "/data/9.work/ctpn-data"
 
     # in.
@@ -61,10 +76,10 @@ class Config(object):
 
     # 数据集路径, in
     IMAGE_DIR = {2015: '{}/ICDAR_2015/train_images'.format(DATA_ROOT),
-                    2017: '{}/ICDAR2017/0325updated.task1train(626p)/train_images'.format(DATA_ROOT) }
+                    2019: '{}/ICDAR2019/0325updated.task1train(626p)/train_images'.format(DATA_ROOT) }
 
     IMAGE_GT_DIR = {2015 : '{}/ICDAR_2015/train_gt'.format(DATA_ROOT),
-                    2017:'{}/ICDAR2017/0325updated.task1train(626p)/train_gt'.format(DATA_ROOT) }
+                    2019:'{}/ICDAR2019/0325updated.task1train(626p)/train_gt'.format(DATA_ROOT) }
 
     # in, out
     WEIGHT_PATH = '{}/ctpn.100.h5'.format(DATA_ROOT)

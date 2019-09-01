@@ -105,7 +105,7 @@ def main(args):
 
 if __name__ == '__main__':
     parse = argparse.ArgumentParser()
-    parse.add_argument("--year", type=int, default=2017, help="epochs")
+    parse.add_argument("--year", type=int, default=2019, help="epochs")
     parse.add_argument("--epochs", type=int, default=1, help="epochs, original defalt 100")
     parse.add_argument("--init_epochs", type=int, default=0, help="epochs")
     parse.add_argument("--weight_path", type=str, default=None, help="weight path")

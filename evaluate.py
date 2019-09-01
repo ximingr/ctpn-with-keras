@@ -79,8 +79,8 @@ def main(args):
 
 if __name__ == '__main__':
     parse = argparse.ArgumentParser()
-    parse.add_argument("--image_dir", type=str, help="image dir")
-    parse.add_argument("--output_dir", type=str, help="output dir")
+    parse.add_argument("--image_dir", type=str, default="/data/9.work/ctpn-data", help="image dir")
+    parse.add_argument("--output_dir", type=str, default="outputimage", help="output dir")
     parse.add_argument("--weight_path", type=str, default=None, help="weight path")
     parse.add_argument("--use_side_refine", type=int, default=1, help="1: use side refine; 0 not use")
     argments = parse.parse_args(sys.argv[1:])
