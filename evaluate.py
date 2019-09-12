@@ -31,16 +31,18 @@ def generator(image_path_list, image_shape):
 def main(args):
     # 覆盖参数
     config.USE_SIDE_REFINE = bool(args.use_side_refine)
-    if args.weight_path is not None:
-        config.WEIGHT_PATH = args.weight_path
+    if args.weight_path is None:
+        args.weight_path = config.WEIGHT_PATH
     config.IMAGES_PER_GPU = 1
     config.IMAGE_SHAPE = (1024, 1024, 3)
+    config.set_root(args.image_dir)
+
     # 图像路径
     image_path_list = file_utils.get_sub_files(args.image_dir)
 
     # 加载模型
     m = models.ctpn_net(config, 'test')
-    m.load_weights(config.WEIGHT_PATH, by_name=True)
+    m.load_weights(args.weight_path, by_name=True)
 
     # 预测
     start_time = datetime.datetime.now()

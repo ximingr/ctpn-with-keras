@@ -574,17 +574,17 @@ def predict():
     else:
         input_shape = (img_w, img_h, 1)
 
-    fdir = os.path.dirname(get_file('wordlists.tgz',
-                                    origin='http://www.mythic-ai.com/datasets/wordlists.tgz', untar=True))
+    # fdir = os.path.dirname(get_file('wordlists.tgz',
+    #                                 origin='http://www.mythic-ai.com/datasets/wordlists.tgz', untar=True))
 
-    img_gen = TextImageGenerator(monogram_file=os.path.join(fdir, 'wordlist_mono_clean.txt'),
-                                bigram_file=os.path.join(fdir, 'wordlist_bi_clean.txt'),
-                                minibatch_size=minibatch_size,
-                                img_w=img_w,
-                                img_h=img_h,
-                                downsample_factor=(pool_size ** 2),
-                                val_split=words_per_epoch - val_words
-                                )
+    # img_gen = TextImageGenerator(monogram_file=os.path.join(fdir, 'wordlist_mono_clean.txt'),
+    #                             bigram_file=os.path.join(fdir, 'wordlist_bi_clean.txt'),
+    #                             minibatch_size=minibatch_size,
+    #                             img_w=img_w,
+    #                             img_h=img_h,
+    #                             downsample_factor=(pool_size ** 2),
+    #                             val_split=words_per_epoch - val_words
+    #                             )
     act = 'relu'
     input_data = Input(name='the_input', shape=input_shape, dtype='float32')
     inner = Conv2D(conv_filters, kernel_size, padding='same',
@@ -611,14 +611,17 @@ def predict():
     gru_2b = GRU(rnn_size, return_sequences=True, go_backwards=True, kernel_initializer='he_normal', name='gru2_b')(gru1_merged)
 
     # transforms RNN output to character activations:
-    print("output size: ", img_gen.get_output_size() )  # 28
-    print("max len: ", img_gen.absolute_max_string_len) # 16
-    inner = Dense(img_gen.get_output_size(), kernel_initializer='he_normal',
+    # print("output size: ", img_gen.get_output_size() )  # 28
+    # print("max len: ", img_gen.absolute_max_string_len) # 16
+    absolute_max_string_len = 16
+    output_size = 28
+    inner = Dense( output_size, kernel_initializer='he_normal',
                 name='dense2')(concatenate([gru_2, gru_2b]))
     y_pred = Activation('softmax', name='softmax')(inner)
     Model(inputs=input_data, outputs=y_pred).summary()
 
-    labels = Input(name='the_labels', shape=[img_gen.absolute_max_string_len], dtype='float32')
+    '''
+    labels = Input(name='the_labels', shape=[absolute_max_string_len], dtype='float32')
     input_length = Input(name='input_length', shape=[1], dtype='int64')
     label_length = Input(name='label_length', shape=[1], dtype='int64')
     # Keras doesn't currently support loss funcs with extra parameters
@@ -633,15 +636,15 @@ def predict():
     # the loss calc occurs elsewhere, so use a dummy lambda func for the loss
     model.compile(loss={'ctc': lambda y_true, y_pred: y_pred}, optimizer=sgd)
     model.load_weights(weight_file)
+    '''
     # captures output of softmax so we can decode the output during visualization
     test_func = K.function([input_data], [y_pred])
-
 
     # from keras.utils import plot_model
     # plot_model(model, to_file='model.png', show_shapes=True)
 
-
     model_p = Model(inputs=input_data, outputs=y_pred)
+    model_p.load_weights(weight_file)
 
     def decode_predict_ctc(out, top_paths = 1):
         results = []
@@ -672,7 +675,9 @@ def predict():
     # filename = "data/0325-task1-sub000/X00016469612-0.jpg"
     # filename = "data/0325-task1-sub000/X00016469612-21.jpg"
 
-    filename = "ex01.png"
+    # check this : https://stackoverflow.com/questions/44847446/how-can-i-use-the-keras-ocr-example
+
+    filename = "ex02.png"
 
     image = cv2.imread( filename )
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)

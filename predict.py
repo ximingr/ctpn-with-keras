@@ -22,10 +22,12 @@ from ctpn.layers import models
 def main(args):
     # 覆盖参数
     config.USE_SIDE_REFINE = bool(args.use_side_refine)
-    if args.weight_path is not None:
-        config.WEIGHT_PATH = args.weight_path
+    if args.weight_path is None:
+        args.weight_path = config.WEIGHT_PATH
     config.IMAGES_PER_GPU = 1
     config.IMAGE_SHAPE = (1024, 1024, 3)
+    config.set_root(args.image_path)
+
     # 加载图片
     image, image_meta, _, _ = image_utils.load_image_gt(np.random.randint(10),
                                                         args.image_path,
@@ -33,7 +35,7 @@ def main(args):
                                                         None)
     # 加载模型
     m = models.ctpn_net(config, 'test')
-    m.load_weights(config.WEIGHT_PATH, by_name=True)
+    m.load_weights(args.weight_path, by_name=True)
     # m.summary()
 
     # 模型预测

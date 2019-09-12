@@ -16,8 +16,8 @@ from ctpn.layers import models
 from ctpn.config import cur_config as config
 from ctpn.utils import file_utils
 from ctpn.utils.generator import generator
-from ctpn.preprocess import reader
 
+from util_loaddata import load_folder_annotation
 
 def set_gpu_growth():
     os.environ["CUDA_VISIBLE_DEVICES"] = "0"
@@ -52,13 +52,12 @@ def get_call_back():
 def main(args):
 
     set_gpu_growth()
+    config.set_root(args.root)
 
-    # 加载标注
-    annotation_files = file_utils.get_sub_files(config.IMAGE_GT_DIR[args.year])
-    image_annotations = [reader.load_annotation(file,
-                                                config.IMAGE_DIR[args.year]) for file in annotation_files]
-    # 过滤不存在的图像，ICDAR2017中部分图像找不到
-    image_annotations = [ann for ann in image_annotations if os.path.exists(ann['image_path'])]
+    image_annotations = load_folder_annotation(args.root)
+    if len(image_annotations) < 5:
+        print("Too small dataset...")
+        return
 
     # 加载模型
     m = models.ctpn_net(config, 'train')
@@ -68,8 +67,12 @@ def main(args):
     models.add_metrics(m, ['gt_num', 'pos_num', 'neg_num', 'gt_min_iou', 'gt_avg_iou'], output[-5:])
 
     # 从0开始的话，用resnet50
+
     if args.init_epochs > 0:
-        m.load_weights(args.weight_path, by_name=True)
+        if args.weight_path is None:
+            args.weight_path = config.WEIGHT_PATH
+
+        m.load_weights( args.weight_path, by_name=True)
     else:
         m.load_weights(config.PRE_TRAINED_WEIGHT, by_name=True)
 
@@ -97,18 +100,22 @@ def main(args):
                     validation_steps=100 // config.IMAGES_PER_GPU,
                     verbose=True,
                     callbacks=get_call_back(),
-                    workers=2,
+                    workers=args.jobs,
                     use_multiprocessing=True)
 
+    #
+
     # 保存模型
-    m.save(config.WEIGHT_PATH)
+    path = os.path.split(config.WEIGHT_PATH)
+    m.save( os.sep.join([path[0], "ctpn.%03d.h5"%(args.init_epochs + args.epochs)] ) )
 
 
 if __name__ == '__main__':
     parse = argparse.ArgumentParser()
-    parse.add_argument("--year", type=int, default=2019, help="epochs")
+    parse.add_argument("--root", required=True, help="data root folder")
     parse.add_argument("--epochs", type=int, default=1, help="epochs, original defalt 100")
     parse.add_argument("--init_epochs", type=int, default=0, help="epochs")
     parse.add_argument("--weight_path", type=str, default=None, help="weight path")
+    parse.add_argument("--jobs", type=int, default=4, help="concurrent jobs")
     argments = parse.parse_args(sys.argv[1:])
     main(argments)
