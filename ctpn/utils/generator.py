@@ -41,8 +41,13 @@ def generator(image_annotations, batch_size, image_shape, width_stride,
             batch_gt_class_ids.append(
                 np_utils.pad_to_fixed_size(np.expand_dims(np.array(class_ids), axis=1), max_gt_num))
 
-        # 返回结果
+        '''
+        返回结果, 一个tuple: dict， 与None
+        FIXME: 为什么这样返回呢？ 模型在什么地方怎么使用的这个值？
+        '''
+        print("next batch.")
         yield {"input_image": np.asarray(batch_images),
                "input_image_meta": np.asarray(batch_images_meta),
                "gt_class_ids": np.asarray(batch_gt_class_ids),
                "gt_boxes": np.asarray(batch_gt_boxes)}, None
+
