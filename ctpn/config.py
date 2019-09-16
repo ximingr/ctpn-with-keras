@@ -138,7 +138,7 @@ class Config(object):
                     cnter = int(res.group(1))
 
             if cnter != -1:
-                filename = "ctpn.{}.h5".format(cnter)
+                filename = "ctpn.{:03d}.h5".format(cnter)
                 break
 
             if res50_exist:

@@ -134,7 +134,7 @@ def main(args):
                     steps_per_epoch=len(image_annotations) // config.IMAGES_PER_GPU * 2,
                     epochs=args.epochs,
                     initial_epoch=args.init_epochs,
-                    validation_data=val_gen,
+                    validation_data=next(val_gen),
                     validation_steps=100 // config.IMAGES_PER_GPU,
                     verbose=True,
                     callbacks=get_call_back(),
@@ -144,8 +144,8 @@ def main(args):
     #
 
     # # 保存模型
-    # path = os.path.split(config.WEIGHT_PATH)
-    # m.save( os.sep.join([path[0], "ctpn.%03d.h5"%(args.init_epochs + args.epochs)] ) )
+    path = os.path.split(config.WEIGHT_PATH)
+    m.save( os.sep.join([path[0], "ctpn.%03d.h5"%(args.init_epochs + args.epochs)] ) )
 
 
 if __name__ == '__main__':
