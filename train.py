@@ -6,6 +6,7 @@
    date：          2019/3/14
 """
 import os
+import re
 import sys
 import tensorflow as tf
 import keras
@@ -105,6 +106,12 @@ def main(args):
     if args.weight_path is None:
         args.weight_path = config.WEIGHT_PATH
 
+    # get current epoch from file name.
+    if args.init_epochs == 0:
+        res = re.match(r".*ctpn\.(\d+)\.h5", args.weight_path)
+        if res is not None:
+            args.init_epochs = int(res.group(1))
+
     m.load_weights( args.weight_path, by_name=True)
 
     m.summary()
@@ -126,8 +133,6 @@ def main(args):
                         config.IMAGE_SHAPE,
                         config.ANCHORS_WIDTH,
                         config.MAX_GT_INSTANCES)
-
-    print( type(val_gen), next(val_gen) )
 
     # 训练
     m.fit_generator(gen,
@@ -151,7 +156,7 @@ def main(args):
 if __name__ == '__main__':
     parse = argparse.ArgumentParser()
     parse.add_argument("--root", required=True, help="data root folder")
-    parse.add_argument("--epochs", type=int, default=1, help="epochs, original defalt 100")
+    parse.add_argument("--epochs", type=int, default=100, help="epochs, original defalt 100")
     parse.add_argument("--init_epochs", type=int, default=0, help="epochs")
     parse.add_argument("--weight_path", type=str, default=None, help="weight path")
     parse.add_argument("--jobs", type=int, default=1, help="concurrent jobs")
