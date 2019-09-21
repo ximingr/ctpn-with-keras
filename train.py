@@ -150,7 +150,7 @@ def main(args):
 
     # # 保存模型
     path = os.path.split(config.WEIGHT_PATH)
-    m.save( os.sep.join([path[0], "ctpn.%03d.h5"%(args.init_epochs + args.epochs)] ) )
+    m.save( os.sep.join([path[0], "ctpn.%03d.h5"%(args.epochs)] ) )
 
 
 if __name__ == '__main__':
