@@ -139,7 +139,7 @@ def main(args):
                     steps_per_epoch=len(image_annotations) // config.IMAGES_PER_GPU * 2,
                     epochs=args.epochs,
                     initial_epoch=args.init_epochs,
-                    validation_data=next(val_gen),
+                    validation_data=val_gen,
                     validation_steps=100 // config.IMAGES_PER_GPU,
                     verbose=True,
                     callbacks=get_call_back(),
