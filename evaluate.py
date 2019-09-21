@@ -22,8 +22,7 @@ def generator(image_path_list, image_shape):
         image, image_meta, _, _ = image_utils.load_image_gt(np.random.randint(10),
                                                             image_path,
                                                             image_shape[0])
-        if i % 200 == 0:
-            print("开始评估第 {} 张图像".format(i))
+        print("开始评估第 {} 张图像".format(i))
         yield {"input_image": np.asarray([image]),
                "input_image_meta": np.asarray([image_meta])}
 
