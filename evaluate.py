@@ -36,6 +36,11 @@ def main(args):
     config.IMAGE_SHAPE = (720, 720, 3)
     config.set_root(args.root)
 
+    try:
+        os.makedirs(args.output_dir)
+    except:
+        pass
+
     # 图像路径
     image_path_list = file_utils.get_sub_files(args.root)
 

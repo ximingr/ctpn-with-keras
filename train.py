@@ -22,8 +22,13 @@ from util_loaddata import load_folder_annotation
 
 def set_gpu_growth():
     os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+
     cfg = tf.ConfigProto()
+    # cfg = tf.ConfigProto(log_device_placement = True)
     cfg.gpu_options.allow_growth = True
+    cfg.gpu_options.per_process_gpu_memory_fraction = 0.6 # 每个GPU现存上届控制在60%以内
+    cfg.gpu_options.allocator_type = 'BFC' #A "Best-fit with coalescing" algorithm, simplified from a version of dlmalloc
+
     session = tf.Session(config=cfg)
     keras.backend.set_session(session)
 
