@@ -22,8 +22,7 @@ def generator(image_path_list, image_shape):
         image, image_meta, _, _ = image_utils.load_image_gt(np.random.randint(10),
                                                             image_path,
                                                             image_shape[0])
-        if i % 200 == 0:
-            print("开始评估第 {} 张图像".format(i))
+        print("开始评估第 {} 张图像".format(i))
         yield {"input_image": np.asarray([image]),
                "input_image_meta": np.asarray([image_meta])}
 
@@ -34,11 +33,16 @@ def main(args):
     if args.weight_path is None:
         args.weight_path = config.WEIGHT_PATH
     config.IMAGES_PER_GPU = 1
-    config.IMAGE_SHAPE = (1024, 1024, 3)
-    config.set_root(args.image_dir)
+    config.IMAGE_SHAPE = (720, 720, 3)
+    config.set_root(args.root)
+
+    try:
+        os.makedirs(args.output_dir)
+    except:
+        pass
 
     # 图像路径
-    image_path_list = file_utils.get_sub_files(args.image_dir)
+    image_path_list = file_utils.get_sub_files(args.root)
 
     # 加载模型
     m = models.ctpn_net(config, 'test')
@@ -81,9 +85,13 @@ def main(args):
 
 if __name__ == '__main__':
     parse = argparse.ArgumentParser()
-    parse.add_argument("--image_dir", type=str, default="/data/9.work/ctpn-data", help="image dir")
+    parse.add_argument("--root", type=str,
+                        required=True, help="image dir")
+
+    parse.add_argument("--weight_path", type=str,
+                        required=True, help="weight path")
+
     parse.add_argument("--output_dir", type=str, default="outputimage", help="output dir")
-    parse.add_argument("--weight_path", type=str, default=None, help="weight path")
     parse.add_argument("--use_side_refine", type=int, default=1, help="1: use side refine; 0 not use")
     argments = parse.parse_args(sys.argv[1:])
     main(argments)

@@ -112,6 +112,7 @@ def _load_annotation_single(annotation_path, image_file):
     return image_annotation
 
 
+@cache_it()
 def load_folder_annotation(folder):
     '''
     this is from reader.py and udpated.
@@ -139,7 +140,7 @@ def load_folder_annotation(folder):
 
 
 @cache_it()
-def load_data_folder(folder):
+def load_folder_images(folder):
     '''
     input:
         "folder" which contains
@@ -177,8 +178,8 @@ def load_data_folder(folder):
 
 
 if __name__ == "__main__":
-    # res = load_data_folder("/data/9.work/ctpn-data/ICDAR2019/0325-task1-subset1")
+    # res = load_folder_images("/data/9.work/ctpn-data/ICDAR2019/0325-task1-subset1")
     # print( len(res) )
-    res = load_data_folder("/data/9.work/ctpn-data/ICDAR2019/0325-task1-sub000")
+    res = load_folder_images("/data/9.work/ctpn-data/ICDAR2019/0325-task1-sub000")
     print( len(res) )
 

@@ -14,7 +14,7 @@ class Config(object):
     IMAGES_PER_GPU = 4
 
     IMAGE_SHAPE = (720, 720, 3)
-    MAX_GT_INSTANCES = 1000
+    MAX_GT_INSTANCES = 700
 
     NUM_CLASSES = 1 + 1  #
     CLASS_MAPPING = {'bg': 0,
@@ -107,24 +107,26 @@ class Config(object):
         return self.root_dir
 
 
-    def get_weight_file(self, parent_limit=2):
+    def get_weight_file(self, parent_limit=3):
         '''
         parent_limit: how many levels to go up if not found in current root folder.
+            The current folder is not included.
         '''
+        re_filter = re.compile(r"ctpn\.(\d+)\.h5")
+
         res50_exist = None
         cnter = -1
         filename = None
 
-        re_filter = re.compile(r"ctpn\.(\d+)\.h5")
-        cur_folder = self.get_root()
+        # abs path is necessary to go up to parent folder.
+        cur_folder = os.path.abspath(self.get_root())
 
-        while parent_limit > 0:
-
+        while parent_limit >= 0:
             for file in os.listdir( cur_folder ):
                 if not file.endswith(".h5"):
                     continue
 
-                if file.startswith == "resnet50":
+                if file.startswith("resnet50"):
                     res50_exist = file
                     continue
 
@@ -136,14 +138,14 @@ class Config(object):
                     cnter = int(res.group(1))
 
             if cnter != -1:
-                filename = "ctpn.{}.h5".format(cnter)
+                filename = "ctpn.{:03d}.h5".format(cnter)
                 break
 
             if res50_exist:
                 filename = res50_exist
                 break
 
-            cur_folder = os.sep.join( cur_folder.split(os.sep)[:-2] )
+            cur_folder = os.sep.join( cur_folder.split(os.sep)[:-1] )
             parent_limit -= 1
 
         if filename:

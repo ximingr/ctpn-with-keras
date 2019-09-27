@@ -8,7 +8,7 @@ import numpy as np
 
 import os
 
-from util_loaddata import load_data_folder, load_image_file
+from util_loaddata import load_folder_images, load_image_file
 from util_cache_func import cache_it
 
 # convert data 只是一个函数即可
@@ -21,7 +21,7 @@ def convert_to_box_label_images(src_folder, target_folder):
     if not os.path.exists(target_folder):
         os.makedirs(target_folder)
 
-    for key, image, boxes in load_data_folder(src_folder):
+    for key, image, boxes in load_folder_images(src_folder):
 
         for idx, (box, label) in enumerate(boxes):
 
